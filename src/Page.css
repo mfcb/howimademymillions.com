@@ -1,0 +1,38 @@
+@font-face {
+  font-family: "courier-prime-sans";
+  src: url("fonts/Courier Prime Sans.ttf");
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "courier-prime-sans";
+  src: url("fonts/Courier Prime Sans Italic.ttf");
+  font-weight: 400;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "courier-prime-sans";
+  src: url("fonts/Courier Prime Sans Bold.ttf");
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "courier-prime-sans";
+  src: url("fonts/Courier Prime Sans Bold Italic.ttf");
+  font-weight: 700;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "VCR OSD";
+  src: url("fonts/VCR-OSD.ttf") format("truetype"),
+        url("fonts/VCR-OSD.woff") format("woff");
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+

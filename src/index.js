@@ -1,13 +1,32 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { CookiesProvider } from 'react-cookie';
+import { ThemeProvider, Typography } from '@mui/material';
+import theme from './theme';
+import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import Page from './Page';
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: (
+      <Page>
+      </Page>
+    ),
+  },
+]);
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <CookiesProvider>
+      <ThemeProvider theme={theme}>
+        <RouterProvider router={router} />
+      </ThemeProvider>
+    </CookiesProvider>
   </React.StrictMode>
 );
 
