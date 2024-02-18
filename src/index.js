@@ -7,12 +7,14 @@ import { ThemeProvider, Typography } from '@mui/material';
 import theme from './theme';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import Page from './Page';
+import MainPage from './components/mainPage';
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: (
       <Page>
+        <MainPage />
       </Page>
     ),
   },
