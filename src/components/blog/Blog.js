@@ -19,7 +19,7 @@ export default function Blog(props) {
     const {postId} = useParams();
 
     useEffect(() => {
-        let postFetchRoute = WP_API_URL + 'posts?_embed';
+        let postFetchRoute = WP_API_URL + 'scraps?_embed';
         if(postId) {
             postFetchRoute += '&include=' + postId;
         }
@@ -165,12 +165,12 @@ export default function Blog(props) {
                                                 component={RouterLink}
                                                 to={"/blog/"+post.id}
                                                 sx={{
-                                                    fontSize: theme => theme.sizes.p,
+                                                    fontSize: '.9rem',
                                                     textAlign: "center",
                                                     rotate: '.3deg',
                                                     textDecoration: 'none',
-                                                    letterSpacing: '1px',
-                                                    fontWeight: 'bold',
+                                                    letterSpacing: '3px',
+                                                    // fontWeight: 'bold',
                                                     '&:hover': {cursor: 'pointer',}
                                                 }}>
                                         {getPostDate(post.date)}
@@ -196,8 +196,8 @@ export default function Blog(props) {
                                         alignItems: 'center',
                                         display:'flex',
                                         justifyContent: 'center',
-                                        paddingTop: theme => theme.spacing(3),
-                                        paddingBottom: theme => theme.spacing(3),
+                                        paddingTop: theme => theme.spacing(2),
+                                        paddingBottom: theme => theme.spacing(2),
                                         marginTop: theme => theme.spacing(3),
                                         marginBottom: theme => theme.spacing(3),
                                         zIndex: -1,

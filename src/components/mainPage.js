@@ -44,11 +44,11 @@ export default function MainPage(props) {
     return (
       <Fade in>
           <Grid sx={{minHeight:'100vh'}} id="mainGrid" direction="column" justifyContent="space-between" container spacing={0} rowSpacing={0}>          
-            <Grid item container sx={{minHeight: '90vh'}} justifyContent="center" alignItems="center" direction="column" xs={12}>
+            {/* <Grid item container sx={{minHeight: '90vh'}} justifyContent="center" alignItems="center" direction="column" xs={12}>
               <Grid item xs={12} sx={{marginTop: '0px'}}>
                 <Heading>HOW I MADE MY MILLIONS</Heading>
               </Grid>
-            </Grid>
+            </Grid> */}
             <Grid item xs={12}>
               <Blog />
             </Grid>
