@@ -25,7 +25,6 @@ export default function Blog(props) {
     useEffect(() => {
         const fetchPosts = async () => {
             setLoading(true);
-            if(page <= numPages) {
                 try {
                     let path = `https://content.markusbuhl.com/wp-json/wp/v2/scraps?page=${page}`;
                     if(postId) {
@@ -34,28 +33,28 @@ export default function Blog(props) {
                     }
                     console.log("Fetching " + path)
                     const response = await axios.get(path);
-                    if(response.data.length) {
-                        response.data.forEach(element => {
-                            if(!posts.some(item => item.id === element.id)) {
-                                posts.push(element);
-                            }
-                        })
-                        setPosts(posts);
+                    if (response.data.length) {
+                        setPosts(prevPosts => {
+                            const newPosts = [...prevPosts];
+                            response.data.forEach(element => {
+                                if (!newPosts.some(item => item.id === element.id)) {
+                                    newPosts.push(element);
+                                }
+                            });
+                            return newPosts;
+                        });
                     } else {
                         setPosts([response.data]);
                     }
-                    setNumPages(response.headers["x-wp-totalpages"]);
-                    if(!postsReady) setPostsReady(true);
                     setLoading(false);
+                    if(!postsReady) setPostsReady(true);
                 } catch (error) {
                     console.error('Error fetching posts:', error);
                     setLoading(false);
                 }
             }
-        };
-
         fetchPosts();
-    }, [page,postsReady,posts, numPages, postId]);
+    }, [page, postId, setPosts, postsReady]);
 
     useEffect(() => {
         const handleScroll = debounce(() => {
