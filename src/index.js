@@ -10,6 +10,8 @@ import Page from './Page';
 import MainPage from './components/mainPage';
 import SinglePostPage from './components/blog/SinglePostPage';
 import MultiPostPage from './components/blog/MultiPostPage';
+import AboutPage from './components/AboutPage';
+import LegalPage from './components/LegalPage';
 
 const router = createBrowserRouter([
   {
@@ -29,6 +31,22 @@ const router = createBrowserRouter([
         <MainPage>
           <SinglePostPage />
         </MainPage>
+      </Page>
+    ),
+  },
+  {
+    path: "/about",
+    element: (
+      <Page>
+        <AboutPage />
+      </Page>
+    ),
+  },
+  {
+    path: "/legal",
+    element: (
+      <Page>
+        <LegalPage />
       </Page>
     ),
   },

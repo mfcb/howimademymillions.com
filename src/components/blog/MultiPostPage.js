@@ -20,7 +20,8 @@ function MultiPostPage(props) {
                     if(page <= numPages) {
                         const path = `https://content.markusbuhl.com/wp-json/wp/v2/scraps?page=${page}`;
                         const response = await axios.get(path);
-                        setNumPages(response.headers["x-wp-totalpages"])
+                        setNumPages(response.headers["x-wp-totalpages"]);
+                        console.log("Num pages " + response.headers["x-wp-totalpages"]);
                         setPosts(prevPosts => {
                             const newPosts = [...prevPosts];
                             response.data.forEach(element => {
@@ -45,7 +46,7 @@ function MultiPostPage(props) {
     useEffect(() => {
         const handleScroll = debounce(() => {
         if (
-            window.innerHeight + document.documentElement.scrollTop >= document.documentElement.offsetHeight
+            Math.round(window.innerHeight + document.documentElement.scrollTop) >= document.documentElement.offsetHeight
         ) {
             if (loading) return;
             setPage(prevPage => prevPage + 1);

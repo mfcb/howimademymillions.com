@@ -30,7 +30,7 @@ export default function WpApiPostContent(props) {
                 return (<Span strike>{domToReact(children, options)}</Span>)
             } else if(name === "p") {
                 pIndex++;
-                let textAlign = 'center';
+                let textAlign = 'left';
                 if(attribs.class?.includes("align-left")) {
                     textAlign = "left";
                 } else if(attribs.class?.includes("align-right")) {

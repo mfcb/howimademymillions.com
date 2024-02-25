@@ -50,20 +50,17 @@ export const ExtLink = (props) => <Link
                                         {...props}
                                         sx={{
                                           background:       props.clean ? 'none' : 'none',
-                                          boxShadow:        props.clean ? 'none' : shadow,
-                                          webkitBoxShadow:  props.clean ? 'none' : shadow,
-                                          mozBoxShadow:     props.clean ? 'none' : shadow,
                                           // fontWeight: '800',
                                           fontStyle: props.italic ? 'italic' : 'normal',
                                           textTransform: 'uppercase',
                                           textDecoration: props.clean ? 'none' : 'underline',
-                                          letterSpacing: 'normal',
+                                          letterSpacing: 2,
                                           '&:hover': {
                                             background: props.simple && 'none',
                                             cursor: 'ne-resize',
                                             color: 'blue',
                                           },
-                                          fontSize: theme => props.lg ? theme.sizes.p.lg : theme.sizes.p,
+                                          // fontSize: theme => props.lg ? theme.sizes.p.lg : theme.sizes.p,
                                           
                                         }}
                                    />                                   

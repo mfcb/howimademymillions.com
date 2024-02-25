@@ -1,11 +1,11 @@
-import { Fade, Grid, Typography, } from "@mui/material";
+import { Box, Fade, Grid, Typography, } from "@mui/material";
 import { useState } from "react";
 import Blog from "./blog/Blog";
 import { useLocation } from "react-router-dom";
 import {Link as ScrollLink, animateScroll as scroll,scroller } from "react-scroll";
 import {Link as RouterLink} from "react-router-dom";
 import NavLink from "./nav/NavLink";
-import { Heading } from "./util/type";
+import { Heading, SmallHeading } from "./util/type";
 
 const MainLink = (props) => (
   <NavLink component={RouterLink} href="#" to={props.to} sx={{textDecoration: 'none',letterSpacing:1,}}>{props.children}</NavLink>
@@ -50,7 +50,10 @@ export default function MainPage(props) {
     
     return (
       <Fade in>
-          <Grid sx={{minHeight:'100vh'}} id="mainGrid" direction="column" justifyContent="space-between" container spacing={0} rowSpacing={0}>          
+          <Grid sx={{minHeight:'100vh'}} id="mainGrid" direction="column" container spacing={0} rowSpacing={0}>          
+            <Grid item xs={12} sx={{textAlign:'center',marginTop:theme=>theme.spacing(1)}}>
+              <NavLink href="#" component={RouterLink} to="/about" sx={{textDecoration:'none'}}>h.i.m.m.m</NavLink>
+            </Grid>
             <Grid item xs={12}>
               {props.children}
             </Grid>
