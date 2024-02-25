@@ -11,65 +11,11 @@ import debounce from "lodash.debounce";
 
 export default function Blog(props) {
     const [categories,setCategories] = React.useState([]);
-    const [postsReady, setPostsReady] = React.useState(false);
+    
     const [copyMessage, setCopyMessage] = React.useState("");
     const [errorMessage, setErrorMessage] = React.useState("");
     const {readyHandler} = props;
-    const {postId} = useParams();
-
-    const [posts, setPosts] =       React.useState([]);
-    const [loading, setLoading] =   React.useState(true);
-    const [page, setPage] =         React.useState(1);
-    const [numPages, setNumPages] = React.useState(1);
-
-    useEffect(() => {
-        const fetchPosts = async () => {
-            setLoading(true);
-                try {
-                    let path = `https://content.markusbuhl.com/wp-json/wp/v2/scraps?page=${page}`;
-                    if(postId) {
-                        console.log("Post id " + postId);
-                        path = `https://content.markusbuhl.com/wp-json/wp/v2/scraps/${postId}`   
-                    }
-                    console.log("Fetching " + path)
-                    const response = await axios.get(path);
-                    if (response.data.length) {
-                        setPosts(prevPosts => {
-                            const newPosts = [...prevPosts];
-                            response.data.forEach(element => {
-                                if (!newPosts.some(item => item.id === element.id)) {
-                                    newPosts.push(element);
-                                }
-                            });
-                            return newPosts;
-                        });
-                    } else {
-                        setPosts([response.data]);
-                    }
-                    setLoading(false);
-                    if(!postsReady) setPostsReady(true);
-                } catch (error) {
-                    console.error('Error fetching posts:', error);
-                    setLoading(false);
-                }
-            }
-        fetchPosts();
-    }, [page, postId, setPosts, postsReady]);
-
-    useEffect(() => {
-        const handleScroll = debounce(() => {
-        if (
-            window.innerHeight + document.documentElement.scrollTop >= document.documentElement.offsetHeight
-        ) {
-            if (loading) return;
-            setPage(prevPage => prevPage + 1);
-        }
-        },100);
-
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, [loading]);
-
+    
     const getCategory = (categoryId) => {
         return categories?.find(item => (item.id === categoryId))?.name || "";
     }
@@ -110,7 +56,7 @@ export default function Blog(props) {
                 xs: '100%',
             },
         }}>
-            <Fade in={!postsReady}>
+            <Fade in={!props.postsReady}>
                 <Box sx={{
                     fontSize: '18px',
                     textAlign: 'center',
@@ -124,7 +70,7 @@ export default function Blog(props) {
                         justifyContent: 'center',
                         alignItems: 'center',
                         textAlign: 'center',
-                        animation: postsReady ? 'spin 1.5s' : 'spin 1.5s infinite',
+                        animation: props.postsReady ? 'spin 1.5s' : 'spin 1.5s infinite',
                         transition: 'animation 0.5s',
                         marginLeft: 'auto',
                         marginRight: 'auto',
@@ -138,10 +84,10 @@ export default function Blog(props) {
                     </Box>
                 </Box>
             </Fade>
-            <Fade in={postsReady}>
+            <Fade in={props.postsReady}>
                 <Box sx={{textAlign:'center', marginTop: theme => theme.spacing(0)}}>
                     {errorMessage && showErrorMessage()}
-                    {posts?.map((post, index) => (
+                    {props.posts?.map((post, index) => (
                         <Box
                             id={"__" + post.id}
                             key={index}
@@ -246,12 +192,6 @@ export default function Blog(props) {
                     ))}
                 </Box>
             </Fade>
-              <Grid container direction="column" justifyContent="center" alignItems="center">
-                <Grid item xs={12} sx={{textAlign:'center'}}>
-                    <Typography>x</Typography>
-                    <Typography sx={{lineHeight:2}}>{!postsReady ? "loading content" : "end of website"}</Typography>
-                </Grid>
-              </Grid>
         </Box>
     )
 }

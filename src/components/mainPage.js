@@ -52,7 +52,7 @@ export default function MainPage(props) {
       <Fade in>
           <Grid sx={{minHeight:'100vh'}} id="mainGrid" direction="column" justifyContent="space-between" container spacing={0} rowSpacing={0}>          
             <Grid item xs={12}>
-              <Blog loadHandler={blogLoadHandler} />
+              {props.children}
             </Grid>
           </Grid>
       </Fade>

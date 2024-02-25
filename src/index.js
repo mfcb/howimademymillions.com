@@ -8,13 +8,17 @@ import theme from './theme';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import Page from './Page';
 import MainPage from './components/mainPage';
+import SinglePostPage from './components/blog/SinglePostPage';
+import MultiPostPage from './components/blog/MultiPostPage';
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: (
       <Page>
-        <MainPage />
+        <MainPage>
+          <MultiPostPage />
+        </MainPage>
       </Page>
     ),
   },
@@ -22,7 +26,9 @@ const router = createBrowserRouter([
     path: "/:postId",
     element: (
       <Page>
-        <MainPage />
+        <MainPage>
+          <SinglePostPage />
+        </MainPage>
       </Page>
     ),
   },
