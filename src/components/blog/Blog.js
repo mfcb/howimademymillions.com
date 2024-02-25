@@ -1,16 +1,15 @@
 import { Container } from "@mui/system";
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import axios from 'axios';
-import { Box, Fade,  Tooltip, Typography } from "@mui/material";
+import { Box, Fade,  Grid,  Tooltip, Typography } from "@mui/material";
 import WpApiPostContent from "./WpApiPostContent";
 import { WP_API_URL } from "../../const/settings";
 import NavLink from "../nav/NavLink";
 import {Link as RouterLink, useParams} from "react-router-dom";
 import { pageCache } from "../../const/global";
+import debounce from "lodash.debounce";
 
 export default function Blog(props) {
-
-    const [posts, setPosts] = React.useState([]);
     const [categories,setCategories] = React.useState([]);
     const [postsReady, setPostsReady] = React.useState(false);
     const [copyMessage, setCopyMessage] = React.useState("");
@@ -18,41 +17,59 @@ export default function Blog(props) {
     const {readyHandler} = props;
     const {postId} = useParams();
 
+    const [posts, setPosts] =       React.useState([]);
+    const [loading, setLoading] =   React.useState(true);
+    const [page, setPage] =         React.useState(1);
+    const [numPages, setNumPages] = React.useState(1);
+
     useEffect(() => {
-        let postFetchRoute = WP_API_URL + 'scraps?_embed';
-        if(postId) {
-            postFetchRoute += '&include=' + postId;
-        }
-        if(pageCache['blog'] && pageCache['blog']['posts'].find(post => post.id === postId)) {
-            setCategories(pageCache['blog']['categories']);
-            setPosts(pageCache['blog']['posts']);
-            setPostsReady(true);
-            readyHandler?.();
-        } else {
-            Promise.all([
-                axios.get(postFetchRoute),
-                axios.get(WP_API_URL + "categories"),
-            ]).then(([postResponse, catResponse]) => {
-                // console.dir(postResponse, null);
-                if(postResponse.data.length > 0) {
-                    pageCache['blog'] = {};
-                    pageCache['blog']['categories'] = catResponse.data;
-                    pageCache['blog']['posts'] = postResponse.data;
-                    setCategories(catResponse.data);
-                    setPosts(postResponse.data);
-                    setPostsReady(true);
-                    readyHandler?.();
-                } else {
+        const fetchPosts = async () => {
+            setLoading(true);
+            if(page <= numPages) {
+                try {
+                    let path = `https://content.markusbuhl.com/wp-json/wp/v2/scraps?page=${page}`;
                     if(postId) {
-                        setErrorMessage("Entry not found");
-                    } else {
-                        setErrorMessage("No posts to show");
+                        console.log("Post id " + postId);
+                        path = `https://content.markusbuhl.com/wp-json/wp/v2/scraps/${postId}`   
                     }
-                    setPostsReady(true);
+                    console.log("Fetching " + path)
+                    const response = await axios.get(path);
+                    if(response.data.length) {
+                        response.data.forEach(element => {
+                            if(!posts.some(item => item.id === element.id)) {
+                                posts.push(element);
+                            }
+                        })
+                        setPosts(posts);
+                    } else {
+                        setPosts([response.data]);
+                    }
+                    setNumPages(response.headers["x-wp-totalpages"]);
+                    if(!postsReady) setPostsReady(true);
+                    setLoading(false);
+                } catch (error) {
+                    console.error('Error fetching posts:', error);
+                    setLoading(false);
                 }
-            })
+            }
+        };
+
+        fetchPosts();
+    }, [page,postsReady,posts, numPages, postId]);
+
+    useEffect(() => {
+        const handleScroll = debounce(() => {
+        if (
+            window.innerHeight + document.documentElement.scrollTop >= document.documentElement.offsetHeight
+        ) {
+            if (loading) return;
+            setPage(prevPage => prevPage + 1);
         }
-    }, [setCategories, setPosts, setPostsReady, postId, readyHandler]);
+        },100);
+
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, [loading]);
 
     const getCategory = (categoryId) => {
         return categories?.find(item => (item.id === categoryId))?.name || "";
@@ -156,14 +173,9 @@ export default function Blog(props) {
                                 },
                                 maxWidth: '700px',
                             }}>
-                                <Tooltip
-                                    title={copyMessage !== "" ? copyMessage : "MM/DD/YYYY"}
-                                    placement="top"
-                                    onClose={() => setCopyMessage("")}
-                                >
                                     <NavLink 
                                                 component={RouterLink}
-                                                to={"/blog/"+post.id}
+                                                to={"/"+post.id}
                                                 sx={{
                                                     fontSize: '.9rem',
                                                     textAlign: "center",
@@ -175,7 +187,6 @@ export default function Blog(props) {
                                                 }}>
                                         {getPostDate(post.date)}
                                     </NavLink>
-                                </Tooltip>
                                 <br />
                                 <Box sx={{
                                     '& p': {
@@ -236,6 +247,12 @@ export default function Blog(props) {
                     ))}
                 </Box>
             </Fade>
+              <Grid container direction="column" justifyContent="center" alignItems="center">
+                <Grid item xs={12} sx={{textAlign:'center'}}>
+                    <Typography>x</Typography>
+                    <Typography sx={{lineHeight:2}}>{!postsReady ? "loading content" : "end of website"}</Typography>
+                </Grid>
+              </Grid>
         </Box>
     )
 }

@@ -78,6 +78,7 @@ theme = createTheme(theme, {
                         background: 'yellow',
                         color: 'blue',
                     },
+                    letterSpacing: 2,
 
                 },
                 // h1: {

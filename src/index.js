@@ -18,6 +18,14 @@ const router = createBrowserRouter([
       </Page>
     ),
   },
+  {
+    path: "/:postId",
+    element: (
+      <Page>
+        <MainPage />
+      </Page>
+    ),
+  },
 ]);
 
 

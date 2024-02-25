@@ -17,58 +17,42 @@ export default function MainPage(props) {
     const {pathname} = useLocation();
     const [passportActive, setPassportActive] = useState(false);
 
+    const [isBlogLoading, setIsBlogLoading] = useState(false);
+
     const onWorksReady = () => {
         setWorksReady(true);
       }
       
-      const scrollTo = (e, to,duration) => {
-        e?.preventDefault();
-        scroller.scrollTo(to, {
-          duration: duration || 400,
-          delay: 1,
-          smooth: true,
-        })
+    const scrollTo = (e, to,duration) => {
+      e?.preventDefault();
+      scroller.scrollTo(to, {
+        duration: duration || 400,
+        delay: 1,
+        smooth: true,
+      })
+    }
+  
+    const onBlogReady = () => {
+      if(props.blog) {
+        scrollTo(null,"blog");
+      } else if(props.about) {
+        scrollTo(null,"about");
+      } else if(props.work) {
+        scrollTo(null,"work");
       }
-    
-      const onBlogReady = () => {
-        if(props.blog) {
-          scrollTo(null,"blog");
-        } else if(props.about) {
-          scrollTo(null,"about");
-        } else if(props.work) {
-          scrollTo(null,"work");
-        }
-        setBlogReady(true);
-      }
+      setBlogReady(true);
+    }
+
+    const blogLoadHandler = (loading) => {
+      console.log("loading? " + loading);
+      setIsBlogLoading(loading);
+    }
     
     return (
       <Fade in>
           <Grid sx={{minHeight:'100vh'}} id="mainGrid" direction="column" justifyContent="space-between" container spacing={0} rowSpacing={0}>          
-            {/* <Grid item container sx={{minHeight: '90vh'}} justifyContent="center" alignItems="center" direction="column" xs={12}>
-              <Grid item xs={12} sx={{marginTop: '0px'}}>
-                <Heading>HOW I MADE MY MILLIONS</Heading>
-              </Grid>
-            </Grid> */}
             <Grid item xs={12}>
-              <Blog />
-            </Grid>
-            <Grid item container direction="column" sx={{textAlign: 'center', }} spacing={1}>
-              <Grid item>
-                <Typography>+</Typography>
-              </Grid>
-              <Grid item>
-                <MainLink>about</MainLink>
-              </Grid>
-              <Grid item>
-                <MainLink>portfolio</MainLink>
-              </Grid>
-              <Grid item>
-                <MainLink>legal</MainLink>
-              </Grid>
-              <Grid item>
-                <Typography>x</Typography>
-                <Typography sx={{lineHeight:2}}>end of website</Typography>
-              </Grid>
+              <Blog loadHandler={blogLoadHandler} />
             </Grid>
           </Grid>
       </Fade>
